@@ -1,3 +1,9 @@
+export enum ProjectStatus {
+  NOT_STARTED = 'Not Started',
+  IN_PROGRESS = 'In Progress',
+  COMPLETED = 'Completed',
+}
+
 export enum TaskStatus {
   TODO = 'todo',
   IN_PROGRESS = 'in_progress',

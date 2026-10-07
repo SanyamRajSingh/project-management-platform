@@ -41,8 +41,18 @@ export class TasksService {
       await this.validateAssignee(dto.assignedTo, organizationId);
     }
 
+    const title = (dto.title || dto.name || '').trim();
+    if (!title) {
+      throw new AppError(
+        ErrorCodes.VALIDATION_ERROR,
+        'Task title or name is required',
+        400,
+      );
+    }
+
     const task = await this.tasksRepository.create({
       ...dto,
+      title,
       dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
       projectId,
       organizationId,
@@ -76,7 +86,11 @@ export class TasksService {
         projectId,
         organizationId,
         userId,
-      ).catch((err: Error) => this.logger.error(`Failed to send task-assigned email: ${err.message}`));
+      ).catch((err: Error) =>
+        this.logger.error(
+          `Failed to send task-assigned email: ${err.message}`,
+        ),
+      );
     }
 
     return task;
@@ -140,10 +154,17 @@ export class TasksService {
     }
 
     const updateData: Record<string, any> = { ...dto };
+    if (dto.name && !dto.title) {
+      updateData.title = dto.name;
+      delete updateData.name;
+    }
     if (dto.dueDate !== undefined) {
       updateData.dueDate = dto.dueDate ? new Date(dto.dueDate) : null;
     }
-    if ('assignedTo' in dto && (dto.assignedTo === null || dto.assignedTo === '')) {
+    if (
+      'assignedTo' in dto &&
+      (dto.assignedTo === null || dto.assignedTo === '')
+    ) {
       updateData.assignedTo = null;
     }
     await this.tasksRepository.update(id, updateData);
@@ -178,7 +199,11 @@ export class TasksService {
         task.projectId,
         organizationId,
         userId,
-      ).catch((err: Error) => this.logger.error(`Failed to send task-assigned email: ${err.message}`));
+      ).catch((err: Error) =>
+        this.logger.error(
+          `Failed to send task-assigned email: ${err.message}`,
+        ),
+      );
     }
 
     return updatedTask;
@@ -208,7 +233,10 @@ export class TasksService {
       type: EventType.TASK_DELETED,
       payload: {
         entityId: id,
-        snapshot: { title: task.title, projectId: task.projectId },
+        snapshot: {
+          title: task.title,
+          projectId: task.projectId,
+        },
       },
       occurredAt: new Date(),
       organizationId,
@@ -217,14 +245,13 @@ export class TasksService {
   }
 
   private async validateAssignee(
-    userId: string,
+    assignedTo: string,
     organizationId: string,
   ): Promise<void> {
     const membership = await this.membershipsService.getMembership(
-      userId,
+      assignedTo,
       organizationId,
     );
-
     if (!membership) {
       throw new AppError(
         ErrorCodes.INVALID_ASSIGNEE,
@@ -239,29 +266,31 @@ export class TasksService {
     task: Task,
     projectId: string,
     organizationId: string,
-    assignerId: string,
+    assignedById: string,
   ): Promise<void> {
-    const [assignee, assigner, org, project] = await Promise.all([
+    const [assignee, assigner, project, org] = await Promise.all([
       this.usersService.findById(assigneeId),
-      this.usersService.findById(assignerId),
+      this.usersService.findById(assignedById),
+      this.projectsService.findOne(projectId, organizationId),
       this.organizationsService.findById(organizationId),
-      this.projectsService.findOne(projectId, organizationId).catch(() => null),
     ]);
 
-    if (!assignee?.email) {
-      return;
-    }
+    if (!assignee || !org) return;
+
+    const assignerName = assigner
+      ? `${assigner.firstName} ${assigner.lastName}`.trim()
+      : 'A team member';
 
     await this.mailService.sendTaskAssignedEmail({
       recipientEmail: assignee.email,
       recipientName: assignee.firstName,
+      assignerName,
       taskTitle: task.title,
-      taskDescription: task.description || undefined,
-      projectName: project?.name,
-      dueDate: task.dueDate ? new Date(task.dueDate).toLocaleDateString() : undefined,
+      taskDescription: task.description ?? undefined,
+      projectName: project.name,
+      organizationName: org.name,
       priority: task.priority,
-      assignerName: assigner ? `${assigner.firstName} ${assigner.lastName}` : undefined,
-      organizationName: org?.name || 'your organization',
+      dueDate: task.dueDate ? task.dueDate.toISOString().split('T')[0] : undefined,
       taskId: task.id,
     });
   }

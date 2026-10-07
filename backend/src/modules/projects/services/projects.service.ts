@@ -22,11 +22,16 @@ export class ProjectsService {
     userId: string,
     dto: CreateProjectDto,
   ): Promise<Project> {
-    const project = await this.projectsRepository.create({
-      ...dto,
+    const entityData: Partial<Project> = {
+      name: dto.name,
+      description: dto.description,
+      status: dto.status,
+      startDate: dto.startDate ? new Date(dto.startDate) : undefined,
+      endDate: dto.endDate ? new Date(dto.endDate) : undefined,
       organizationId,
       createdBy: userId,
-    });
+    };
+    const project = await this.projectsRepository.create(entityData);
 
     this.logger.log(`Project created: ${project.id} in org ${organizationId}`);
 
@@ -48,12 +53,14 @@ export class ProjectsService {
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
     const search = query.search?.trim() || undefined;
+    const status = query.status?.trim() || undefined;
 
     const [data, total] = await this.projectsRepository.findByOrg(
       organizationId,
       page,
       limit,
       search,
+      status,
     );
 
     return { data, meta: { page, total } };
@@ -93,7 +100,19 @@ export class ProjectsService {
       );
     }
 
-    await this.projectsRepository.update(id, dto);
+    const patch: Partial<Project> = {
+      ...(dto.name !== undefined ? { name: dto.name } : {}),
+      ...(dto.description !== undefined ? { description: dto.description } : {}),
+      ...(dto.status !== undefined ? { status: dto.status } : {}),
+      ...(dto.startDate !== undefined
+        ? { startDate: dto.startDate ? new Date(dto.startDate) : null }
+        : {}),
+      ...(dto.endDate !== undefined
+        ? { endDate: dto.endDate ? new Date(dto.endDate) : null }
+        : {}),
+    };
+
+    await this.projectsRepository.update(id, patch);
 
     this.logger.log(`Project updated: ${id}`);
 
@@ -105,7 +124,7 @@ export class ProjectsService {
       triggeredBy: userId,
     } satisfies DomainEvent);
 
-    return { ...project, ...dto };
+    return { ...project, ...patch };
   }
 
   async remove(

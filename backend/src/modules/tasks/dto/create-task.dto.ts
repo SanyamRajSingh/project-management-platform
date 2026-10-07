@@ -1,20 +1,34 @@
 import {
   IsString,
-  IsNotEmpty,
   IsOptional,
-  IsEnum,
   IsUUID,
   IsDateString,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
-import { TaskStatus } from '../../../shared/enums/task-status.enum';
-import { TaskPriority } from '../../../shared/enums/task-priority.enum';
+import { Transform } from 'class-transformer';
+import {
+  TaskStatus,
+  TaskPriority,
+  normalizeTaskStatus,
+  normalizeTaskPriority,
+} from '../../../shared/enums';
 
 export class CreateTaskDto {
+  @IsOptional()
+  @IsUUID()
+  projectId?: string;
+
+  /** Supports 'title' or assignment-facing 'name' */
+  @ValidateIf((o) => !o.name)
   @IsString()
-  @IsNotEmpty()
   @MaxLength(300)
-  title: string;
+  title?: string;
+
+  @ValidateIf((o) => !o.title)
+  @IsString()
+  @MaxLength(300)
+  name?: string;
 
   @IsOptional()
   @IsString()
@@ -22,11 +36,11 @@ export class CreateTaskDto {
   description?: string;
 
   @IsOptional()
-  @IsEnum(TaskStatus)
+  @Transform(({ value }) => normalizeTaskStatus(value) ?? value)
   status?: TaskStatus;
 
   @IsOptional()
-  @IsEnum(TaskPriority)
+  @Transform(({ value }) => normalizeTaskPriority(value) ?? value)
   priority?: TaskPriority;
 
   @IsOptional()

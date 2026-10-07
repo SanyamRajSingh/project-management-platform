@@ -9,6 +9,7 @@ import { useProjects } from '@/features/projects/hooks/useProjects';
 import { useTasks } from '@/features/tasks/hooks/useTasks';
 import { useOrgMembers, usePendingInvites } from '@/features/organizations/hooks/useOrganizations';
 import { useActivity } from '@/features/activity/hooks/useActivity';
+import { useDashboardStats } from '@/features/dashboard/hooks/useDashboardStats';
 import { TasksTrendChart } from '@/features/dashboard/components/tasks-trend-chart';
 import {
   EmptyChartPlaceholder,
@@ -62,19 +63,28 @@ export default function DashboardPage() {
   const { data: activityData } = useActivity({ limit: 10 });
   const { data: members, isLoading: membersLoading } = useOrgMembers();
   const { data: pendingInvites, isLoading: invitesLoading } = usePendingInvites();
+  const { data: dashboardStats } = useDashboardStats();
 
-  const totalProjects = projectsData?.meta?.total ?? 0;
-  const totalTasks = tasksData?.meta?.total ?? 0;
+  const totalProjects = dashboardStats?.totalProjects ?? projectsData?.meta?.total ?? 0;
+  const totalTasks = dashboardStats?.totalTasks ?? tasksData?.meta?.total ?? 0;
   const totalMembers = members?.length ?? 0;
   const pendingInviteCount = pendingInvites?.length ?? 0;
   const allTasks = useMemo(() => tasksData?.data ?? [], [tasksData?.data]);
 
-  const todoCount = useMemo(() => allTasks.filter((t: Task) => t.status === 'todo').length, [allTasks]);
-  const inProgressCount = useMemo(
-    () => allTasks.filter((t: Task) => t.status === 'in_progress').length,
-    [allTasks],
-  );
-  const doneCount = useMemo(() => allTasks.filter((t: Task) => t.status === 'done').length, [allTasks]);
+  const todoCount = useMemo(() => {
+    if (dashboardStats?.pendingTasks !== undefined) return dashboardStats.pendingTasks;
+    return allTasks.filter((t: Task) => t.status === 'todo' || (t.status as string) === 'Pending').length;
+  }, [allTasks, dashboardStats?.pendingTasks]);
+
+  const inProgressCount = useMemo(() => {
+    return allTasks.filter((t: Task) => t.status === 'in_progress' || (t.status as string) === 'In Progress').length;
+  }, [allTasks]);
+
+  const doneCount = useMemo(() => {
+    if (dashboardStats?.completedTasks !== undefined) return dashboardStats.completedTasks;
+    return allTasks.filter((t: Task) => t.status === 'done' || (t.status as string) === 'Completed').length;
+  }, [allTasks, dashboardStats?.completedTasks]);
+
   const completionRate = totalTasks > 0 ? Math.round((doneCount / totalTasks) * 100) : 0;
   const activeTaskCount = todoCount + inProgressCount;
 

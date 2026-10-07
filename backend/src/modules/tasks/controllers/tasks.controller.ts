@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Patch,
+  Put,
   Delete,
   Body,
   Param,
@@ -14,6 +15,8 @@ import { CreateTaskDto, UpdateTaskDto, TaskFilterDto } from '../dto';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { OrgScoped } from '../../../common/decorators/org-scoped.decorator';
 import { RequestContext } from '../../../shared/interfaces';
+import { AppError } from '../../../shared/errors/app-error';
+import { ErrorCodes } from '../../../shared/errors/error-codes';
 
 @Controller()
 export class TasksController {
@@ -26,6 +29,28 @@ export class TasksController {
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() dto: CreateTaskDto,
   ) {
+    return this.tasksService.create(
+      projectId,
+      user.organizationId!,
+      user.userId,
+      dto,
+    );
+  }
+
+  @OrgScoped()
+  @Post('tasks')
+  async createDirect(
+    @CurrentUser() user: RequestContext,
+    @Body() dto: CreateTaskDto,
+  ) {
+    const projectId = dto.projectId;
+    if (!projectId) {
+      throw new AppError(
+        ErrorCodes.VALIDATION_ERROR,
+        'projectId is required to create a task',
+        400,
+      );
+    }
     return this.tasksService.create(
       projectId,
       user.organizationId!,
@@ -67,6 +92,7 @@ export class TasksController {
   }
 
   @OrgScoped()
+  @Put('tasks/:id')
   @Patch('tasks/:id')
   async update(
     @CurrentUser() user: RequestContext,

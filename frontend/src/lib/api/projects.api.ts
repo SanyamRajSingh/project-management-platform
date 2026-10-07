@@ -5,9 +5,17 @@ import type { ApiResponse, Project, PaginationParams } from '@/types';
 export interface CreateProjectPayload {
   name: string;
   description?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export type UpdateProjectPayload = Partial<CreateProjectPayload>;
+
+export interface ListProjectsParams extends PaginationParams {
+  search?: string;
+  status?: string;
+}
 
 export const projectsApi = {
   create(payload: CreateProjectPayload) {
@@ -15,7 +23,7 @@ export const projectsApi = {
       .catch(normalizeError);
   },
 
-  list(params?: PaginationParams) {
+  list(params?: ListProjectsParams) {
     return apiClient.get<ApiResponse<Project[]>>('/projects', { params })
       .catch(normalizeError);
   },

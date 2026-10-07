@@ -5,6 +5,7 @@ import { Task } from '../entities/task.entity';
 
 interface TaskFilterParams {
   search?: string;
+  projectId?: string;
   status?: string;
   priority?: string;
   assignedTo?: string;
@@ -84,6 +85,11 @@ export class TasksRepository {
     qb: ReturnType<Repository<Task>['createQueryBuilder']>,
     filters: TaskFilterParams,
   ): void {
+    if (filters.projectId) {
+      qb.andWhere('task.projectId = :projectId', {
+        projectId: filters.projectId,
+      });
+    }
     if (filters.search) {
       qb.andWhere('task.title ILIKE :search', { search: `%${filters.search}%` });
     }

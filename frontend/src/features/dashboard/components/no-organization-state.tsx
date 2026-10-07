@@ -57,7 +57,7 @@ export function NoOrganizationState() {
               Let’s get started
             </div>
             <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
-              Welcome to TaskForge
+              Welcome to Flowtide
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-neutral-600">
               Create your first workspace to start organizing projects, tasks, and your team — everything stays in

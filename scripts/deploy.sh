@@ -10,7 +10,7 @@ RETRY_INTERVAL=2
 
 TAG="${1:-latest}"
 
-echo "==> Deploying TaskForge with tag: $TAG"
+echo "==> Deploying Flowtide with tag: $TAG"
 
 # Ensure env file exists
 if [ ! -f "$ENV_FILE" ]; then

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Req } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Req, HttpCode, HttpStatus } from '@nestjs/common';
 import { Request } from 'express';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from '../services/auth.service';
@@ -6,6 +6,7 @@ import {
   RegisterDto,
   LoginDto,
   RefreshTokenDto,
+  LogoutDto,
   VerifyEmailDto,
   ResendVerificationDto,
   ForgotPasswordDto,
@@ -86,11 +87,13 @@ export class AuthController {
     return this.authService.updateProfile(userId, dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('logout')
   async logout(
-    @Body() dto: RefreshTokenDto,
+    @Body() dto: LogoutDto,
     @CurrentUser() _user: RequestContext,
   ) {
-    return this.authService.logout(dto.refreshToken);
+    await this.authService.logout(dto?.refreshToken);
+    return { message: 'Logged out successfully' };
   }
 }

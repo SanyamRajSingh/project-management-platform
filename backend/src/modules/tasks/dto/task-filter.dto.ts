@@ -1,7 +1,18 @@
-import { IsOptional, IsEnum, IsUUID, IsDateString, IsString, MaxLength } from 'class-validator';
+import {
+  IsOptional,
+  IsUUID,
+  IsDateString,
+  IsString,
+  MaxLength,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PaginationDto } from '../../../shared/dto/pagination.dto';
-import { TaskStatus } from '../../../shared/enums/task-status.enum';
-import { TaskPriority } from '../../../shared/enums/task-priority.enum';
+import {
+  TaskStatus,
+  TaskPriority,
+  normalizeTaskStatus,
+  normalizeTaskPriority,
+} from '../../../shared/enums';
 
 export class TaskFilterDto extends PaginationDto {
   @IsOptional()
@@ -10,11 +21,15 @@ export class TaskFilterDto extends PaginationDto {
   search?: string;
 
   @IsOptional()
-  @IsEnum(TaskStatus)
+  @IsUUID()
+  projectId?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => normalizeTaskStatus(value) ?? value)
   status?: TaskStatus;
 
   @IsOptional()
-  @IsEnum(TaskPriority)
+  @Transform(({ value }) => normalizeTaskPriority(value) ?? value)
   priority?: TaskPriority;
 
   @IsOptional()

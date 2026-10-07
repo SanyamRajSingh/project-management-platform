@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Patch,
+  Put,
   Delete,
   Body,
   Param,
@@ -49,6 +50,7 @@ export class ProjectsController {
   }
 
   @OrgScoped()
+  @Put(':id')
   @Patch(':id')
   async update(
     @CurrentUser() user: RequestContext,

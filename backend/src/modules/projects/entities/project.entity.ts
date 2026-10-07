@@ -11,9 +11,11 @@ import {
 } from 'typeorm';
 import { Organization } from '../../organizations/entities/organization.entity';
 import { User } from '../../users/entities/user.entity';
+import { ProjectStatus } from '../../../shared/enums';
 
 @Entity('projects')
 @Index(['organizationId', 'createdAt'])
+@Index(['organizationId', 'status'])
 export class Project {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -30,6 +32,18 @@ export class Project {
 
   @Column({ type: 'text', nullable: true })
   description: string | null;
+
+  @Column({
+    type: 'varchar',
+    default: ProjectStatus.NOT_STARTED,
+  })
+  status: ProjectStatus;
+
+  @Column({ name: 'start_date', type: 'date', nullable: true })
+  startDate: Date | null;
+
+  @Column({ name: 'end_date', type: 'date', nullable: true })
+  endDate: Date | null;
 
   @Column({ name: 'created_by' })
   createdBy: string;

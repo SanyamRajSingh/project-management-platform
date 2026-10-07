@@ -31,15 +31,37 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.name.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1 space-y-1.5">
-            <h3 className="text-[15px] font-semibold leading-snug tracking-tight text-neutral-900 transition-colors group-hover:text-primary-700">
-              {project.name}
-            </h3>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-[15px] font-semibold leading-snug tracking-tight text-neutral-900 transition-colors group-hover:text-primary-700 truncate">
+                {project.name}
+              </h3>
+              {project.status && (
+                <span
+                  className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ${
+                    project.status === 'Completed'
+                      ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                      : project.status === 'In Progress'
+                        ? 'bg-amber-50 text-amber-700 ring-amber-200'
+                        : 'bg-neutral-100 text-neutral-600 ring-neutral-200'
+                  }`}
+                >
+                  {project.status}
+                </span>
+              )}
+            </div>
             {hasDescription ? (
               <p className="text-[13px] leading-relaxed text-neutral-500 line-clamp-2">
                 {truncate(project.description!, 120)}
               </p>
             ) : (
               <p className="text-[13px] italic text-neutral-400">No description yet</p>
+            )}
+            {(project.startDate || project.endDate) && (
+              <div className="pt-1 text-[11px] text-neutral-400">
+                {project.startDate && <span>Start: {new Date(project.startDate).toLocaleDateString()}</span>}
+                {project.startDate && project.endDate && <span> • </span>}
+                {project.endDate && <span>End: {new Date(project.endDate).toLocaleDateString()}</span>}
+              </div>
             )}
           </div>
         </div>

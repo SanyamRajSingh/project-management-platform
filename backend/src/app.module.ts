@@ -37,6 +37,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { BillingModule } from './modules/billing/billing.module';
 import { MailModule } from './modules/mail/mail.module';
 import { HealthModule } from './modules/health/health.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 
 @Module({
@@ -91,6 +92,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     OrganizationsModule,
     ProjectsModule,
     TasksModule,
+    DashboardModule,
     ActivityModule,
     RealtimeModule,
     NotificationsModule,

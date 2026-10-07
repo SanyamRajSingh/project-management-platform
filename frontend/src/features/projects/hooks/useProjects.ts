@@ -11,6 +11,7 @@ import type { PaginationParams } from '@/types';
 
 export interface ProjectListParams extends PaginationParams {
   search?: string;
+  status?: string;
 }
 
 function normalizeParams(params?: ProjectListParams): ProjectListParams | undefined {
@@ -18,6 +19,7 @@ function normalizeParams(params?: ProjectListParams): ProjectListParams | undefi
   return {
     ...params,
     search: params.search?.trim() || undefined,
+    status: params.status?.trim() || undefined,
   };
 }
 

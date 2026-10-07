@@ -18,21 +18,37 @@ export default function ProjectsPage() {
 
   const page = Number(searchParams.get('page')) || 1;
   const search = searchParams.get('search') || '';
+  const status = searchParams.get('status') || '';
 
-  const { data, isLoading, isError, refetch } = useProjects({ page, search: search || undefined });
+  const { data, isLoading, isError, refetch } = useProjects({
+    page,
+    search: search || undefined,
+    status: status || undefined,
+  });
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleSearchChange = useCallback((value: string) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
     if (value) params.set('search', value);
+    else params.delete('search');
+    params.delete('page');
     const qs = params.toString();
     router.replace(qs ? `?${qs}` : '/projects');
-  }, [router]);
+  }, [router, searchParams]);
+
+  const handleStatusChange = useCallback((value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set('status', value);
+    else params.delete('status');
+    params.delete('page');
+    const qs = params.toString();
+    router.replace(qs ? `?${qs}` : '/projects');
+  }, [router, searchParams]);
 
   function handlePageChange(newPage: number) {
-    const params = new URLSearchParams();
-    if (search) params.set('search', search);
+    const params = new URLSearchParams(searchParams.toString());
     if (newPage > 1) params.set('page', String(newPage));
+    else params.delete('page');
     router.push(`?${params.toString()}`);
   }
 
@@ -86,7 +102,13 @@ export default function ProjectsPage() {
 
       {/* Toolbar */}
       <div className="mt-8 flex flex-col gap-4 border-b border-neutral-200/70 pb-8 sm:flex-row sm:items-center sm:justify-between">
-        <ProjectFilters search={search} onSearchChange={handleSearchChange} className="sm:flex-1" />
+        <ProjectFilters
+          search={search}
+          onSearchChange={handleSearchChange}
+          status={status}
+          onStatusChange={handleStatusChange}
+          className="sm:flex-1"
+        />
       </div>
 
       {/* Loading */}

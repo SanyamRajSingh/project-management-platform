@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Project } from '../entities/project.entity';
+import { normalizeProjectStatus } from '../../../shared/enums';
 
 @Injectable()
 export class ProjectsRepository {
@@ -22,19 +23,33 @@ export class ProjectsRepository {
     return this.repo.findOne({ where: { id, organizationId } });
   }
 
-  // TODO: add pg_trgm index on lower(name), lower(description) for large datasets
   async findByOrg(
     organizationId: string,
     page: number,
     limit: number,
     search?: string,
+    status?: string,
   ): Promise<[Project[], number]> {
+    const normalizedStatus = normalizeProjectStatus(status) ?? status;
     const where: Record<string, unknown>[] = search
       ? [
-          { organizationId, name: ILike(`%${search}%`) },
-          { organizationId, description: ILike(`%${search}%`) },
+          {
+            organizationId,
+            ...(normalizedStatus ? { status: normalizedStatus } : {}),
+            name: ILike(`%${search}%`),
+          },
+          {
+            organizationId,
+            ...(normalizedStatus ? { status: normalizedStatus } : {}),
+            description: ILike(`%${search}%`),
+          },
         ]
-      : [{ organizationId }];
+      : [
+          {
+            organizationId,
+            ...(normalizedStatus ? { status: normalizedStatus } : {}),
+          },
+        ];
 
     return this.repo.findAndCount({
       where,

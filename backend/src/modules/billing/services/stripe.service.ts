@@ -10,9 +10,10 @@ export class StripeService implements IBillingProvider {
   private readonly webhookSecret: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.stripe = new Stripe(
-      this.configService.get<string>('billing.stripeSecretKey', ''),
-    );
+    const key =
+      this.configService.get<string>('billing.stripeSecretKey') ||
+      'sk_test_placeholder_key_dev';
+    this.stripe = new Stripe(key);
     this.webhookSecret = this.configService.get<string>(
       'billing.stripeWebhookSecret',
       '',

@@ -6,4 +6,8 @@ export class ListProjectsDto extends PaginationDto {
   @IsString()
   @MaxLength(200)
   search?: string;
+
+  @IsOptional()
+  @IsString()
+  status?: string;
 }

@@ -62,12 +62,48 @@ export class AuthService {
 
     const passwordHash = await argon2.hash(dto.password);
 
+    let firstName = dto.firstName?.trim();
+    let lastName = dto.lastName?.trim();
+
+    if (!firstName && dto.fullName) {
+      const parts = dto.fullName.trim().split(/\s+/);
+      firstName = parts[0] || 'User';
+      lastName = parts.slice(1).join(' ') || '';
+    }
+
+    firstName = firstName || 'User';
+    lastName = lastName || '';
+
     const user = await this.usersService.createUser({
       email,
       passwordHash,
-      firstName: dto.firstName.trim(),
-      lastName: dto.lastName.trim(),
+      firstName,
+      lastName,
     });
+
+    const isNonProd = process.env.NODE_ENV !== 'production';
+    const shouldAutoVerify =
+      process.env.AUTO_VERIFY_EMAIL === 'true' || isNonProd;
+
+    if (shouldAutoVerify) {
+      await this.usersService.setEmailVerifiedAt(user.id, new Date());
+      const org = await this.organizationsService.createOrganization(user.id, {
+        name: `${firstName}'s workspace`,
+      });
+      await this.usersService.updateCurrentOrg(user.id, org.id);
+
+      const verifiedUser = await this.usersService.findById(user.id);
+      const tokens = await this.tokenService.generateTokenPair(user.id);
+
+      this.logger.log(`User registered and auto-verified (dev mode): ${user.id}`);
+
+      return {
+        message: 'Account created and verified successfully.',
+        user: UserResponseDto.fromEntity(verifiedUser!),
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+    }
 
     const rawToken = this.newOpaqueToken();
     const tokenHash = this.hashOpaqueToken(rawToken);
@@ -358,19 +394,33 @@ export class AuthService {
       );
     }
 
+    let activeUser = user;
+    if (!activeUser.currentOrganizationId) {
+      const memberships = await this.organizationsService.listUserOrganizations(activeUser.id);
+      if (memberships.length > 0) {
+        await this.usersService.updateCurrentOrg(activeUser.id, memberships[0].id);
+      } else {
+        const org = await this.organizationsService.createOrganization(activeUser.id, {
+          name: `${activeUser.firstName}'s workspace`,
+        });
+        await this.usersService.updateCurrentOrg(activeUser.id, org.id);
+      }
+      activeUser = (await this.usersService.findById(activeUser.id))!;
+    }
+
     const tokens = await this.tokenService.generateTokenPair(
-      user.id,
+      activeUser.id,
       undefined,
       device,
       ip,
     );
 
-    this.logger.log(`User logged in: ${user.id}`);
+    this.logger.log(`User logged in: ${activeUser.id}`);
 
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      user: UserResponseDto.fromEntity(user),
+      user: UserResponseDto.fromEntity(activeUser),
     };
   }
 
@@ -440,7 +490,10 @@ export class AuthService {
     return this.getMe(userId);
   }
 
-  async logout(rawRefreshToken: string): Promise<void> {
+  async logout(rawRefreshToken?: string): Promise<void> {
+    if (!rawRefreshToken) {
+      return;
+    }
     try {
       const token =
         await this.tokenService.verifyRefreshToken(rawRefreshToken);
