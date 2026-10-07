@@ -1,167 +1,184 @@
-![TaskForge Dashboard](screenshots/dashboard/1.png)
+# Flowtide
 
-# TaskForge — Multi-Tenant SaaS Project Management Platform
+Plan. Track. Deliver.
 
-TaskForge is a production-grade SaaS project management platform built with **Next.js, NestJS, PostgreSQL, Redis, Socket.IO, Stripe, Docker, and CI/CD**.
-
-It includes organization-based multi-tenancy, role-based access control, Kanban task management, real-time notifications, email workflows, billing architecture, and a polished dashboard UI.
-
-## Live Demo
-
-**Demo:** [https://task-forge-demo.vercel.app](https://task-forge-demo.vercel.app)
-
-### Demo Account
-
-| Field | Value |
-|---|---|
-| **Email** | `demo@taskforge.com` |
-| **Password** | `Demo@12345` |
-
-> The demo account has sample projects, tasks, members, notifications, and dashboard data pre-loaded.
+Flowtide is a modern, unified project and task management platform engineered for high-velocity teams. Built as a full-stack system sharing a single backend across both a web portal and an Android mobile app, Flowtide delivers real-time visibility, fine-grained project tracking, multi-tenant workspace isolation, and automated reporting without unnecessary operational complexity.
 
 ---
 
-## Why This Project Stands Out
+## Overview
 
-- **Multi-tenant SaaS architecture** — organization-scoped data isolation
-- **Role-based access control** — Admin / Member with guard chain enforcement
-- **Kanban board** with drag-and-drop tasks using dnd-kit
-- **Real-time notifications** using Socket.IO
-- **Email notifications** using Nodemailer
-- **Stripe subscription billing** structure
-- **JWT auth** with refresh token rotation and theft detection
-- **PostgreSQL + Redis** backend architecture
-- **Docker-based** local and production setup
-- **CI/CD pipeline** with GitHub Actions
+Modern software teams often struggle with fragmented tooling, where planning lives in one silo, execution in another, and status reports are manually compiled. Flowtide solves this by combining project roadmapping, Kanban-style task execution, aggregate health metrics, and mobile responsiveness into a cohesive platform. 
+
+Every action taken—from creating sprints to updating task priorities—instantly propagates across both Web and Android clients through a unified REST API and normalized PostgreSQL data tier.
 
 ---
 
-## Screenshots
+## Why Flowtide?
 
-### Dashboard & Analytics
-
-**Overview** — Stats cards, task flow over time, and status mix.
-
-![Dashboard overview with metrics and charts](screenshots/dashboard/1.png)
-
-**Operational view** — Workflow health, activity feed, priority mix, deadlines, and "My work."
-
-![Dashboard with workflow health and activity](screenshots/dashboard/2.png)
-
-### Kanban Board
-
-![Kanban task board](screenshots/dashboard/tasks.png)
-
-### Projects
-
-**Project grid** — Workspace projects with search and card layout.
-
-![Projects grid](screenshots/dashboard/projects.png)
-
-**Project detail** — Single project header with board/table switcher and Kanban columns.
-
-![Project detail board view](screenshots/dashboard/project-detail.png)
-
-### Organization Members
-
-**Organizations** — Active workspace, metadata, and team access summary.
-
-![Organizations workspace](screenshots/dashboard/organization.png)
-
-**Team roster** — Members and pending invitations with role badges.
-
-![Team members and invitations](screenshots/dashboard/organization-2.png)
-
-**Invite member** — Modal with email, role, and send invitation.
-
-![Invite member modal](screenshots/dashboard/send-invitation.png)
-
-### Real-Time Notifications
-
-![Notification dropdown](screenshots/dashboard/notifications.png)
-
-### Authentication
-
-Split-panel auth with shared branding.
-
-![Login](screenshots/auth/login.png)
-
-![Create workspace — registration](screenshots/auth/register.png)
-
-![Forgot password](screenshots/auth/forgot-password.png)
-
-### Mobile & Responsive
-
-![Mobile dashboard](screenshots/mobile-view/dashboard.png)
-![Mobile project list](screenshots/mobile-view/project-list.png)
-![Mobile project detail](screenshots/mobile-view/project-detail.png)
-![Mobile organizations](screenshots/mobile-view/organization.png)
+- **Unified Multi-Platform Experience:** A single backend powers both the responsive Next.js web application and the React Native / Expo mobile app.
+- **Production-Ready Architecture:** Modular NestJS architecture, TypeORM data layer, Redis caching, BullMQ background jobs, and robust Argon2id/JWT security.
+- **Enterprise-Grade Data Model:** Normalized relational schema with strict foreign keys, cascade safety, and tenant data isolation.
+- **Fast, Intuitive UX:** Sleek dashboard analytics, visual task management, rapid filtering, and full keyboard/mobile ergonomics.
 
 ---
 
-## Use TaskForge as a Reference For
+## Features
 
-- Building multi-tenant SaaS apps
-- Structuring a Next.js + NestJS monorepo
-- Implementing organization-based RBAC
-- Adding real-time notifications with Socket.IO
-- Designing project/task management workflows
-- Integrating Stripe billing architecture
-- Setting up Docker and CI/CD for full-stack apps
+### Authentication & Identity
+- **Registration & Onboarding:** Secure signup flow with automatic workspace initialization.
+- **Secure Password Hashing:** Argon2id password encryption resistant to GPU cracking.
+- **Persistent Sessions & JWTs:** Short-lived access tokens (15m) combined with rotating refresh tokens (7d).
+- **Graceful Token Renewal:** Automatic silent token refresh on both Web and Mobile clients.
+- **Current User Profile:** Dedicated `/api/auth/me` endpoint to verify session context.
+
+### Project Management
+- **Full Project CRUD:** Create, read, edit, and delete projects with instant UI reactivity.
+- **Lifecycle Status Tracking:** Support for `planned`, `in_progress`, `completed`, and `on_hold` statuses.
+- **Date Range Management:** Defined start dates and target completion dates with integrity validation.
+- **Workspace Scoping:** Strict tenant and creator ownership isolation.
+
+### Task Management
+- **Full Task Lifecycle:** Create, edit, reorder, assign, and delete tasks.
+- **Priority Matrix:** Categorization into `low`, `medium`, `high`, and `urgent` tiers.
+- **Kanban & Status Flow:** Track tasks across `todo`, `in_progress`, `in_review`, and `done` states.
+- **Project Associations:** Direct relational links to parent projects with cascade safety.
+- **One-Tap Completion:** Quick status toggling directly from task lists or detail views.
+
+### Dashboard Analytics
+- **Project Metrics:** Aggregate counters for total projects and active in-progress initiatives.
+- **Task Metrics:** Real-time visibility into completed vs. pending tasks.
+- **Progress Visualizations:** Dynamic progress bars and status distributions calculated via SQL aggregations.
+
+### Search & Filtering
+- **Project Search & Filtering:** Case-insensitive search by project name and filter by status.
+- **Task Search & Filtering:** Full-text filtering across task titles and descriptions.
+- **Multi-Dimension Filters:** Combine status and priority filters simultaneously.
+
+### Mobile App (Android)
+- **Shared Backend:** Direct connection to the same NestJS API and PostgreSQL database.
+- **Hardware-Backed Secure Storage:** Encrypted token persistence using `expo-secure-store`.
+- **Offline Awareness:** Real-time network detection via NetInfo with non-intrusive offline banners.
+- **Pull-to-Refresh:** Instant data synchronization across Dashboard, Projects, and Tasks.
+- **Synchronized State:** Changes made on mobile are immediately available on web upon refresh.
 
 ---
 
-## Tech Stack
+## Architecture
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS 4 |
-| **State** | Zustand (client state), TanStack React Query (server state) |
-| **Realtime Client** | Socket.IO Client |
-| **Drag & Drop** | dnd-kit |
-| **Backend** | NestJS 11, TypeScript |
-| **Database** | PostgreSQL 16, TypeORM |
-| **Cache** | Redis 7, ioredis |
-| **Queue** | BullMQ (separate worker process) |
-| **WebSocket** | Socket.IO via NestJS Gateway |
-| **Email** | Nodemailer with SMTP |
-| **Billing** | Stripe SDK v22 |
-| **Auth** | JWT + Passport + argon2 |
-| **Logging** | Pino (structured JSON) |
+Flowtide follows a modular, shared-backend architecture where both Web and Mobile clients consume the same RESTful API and relational database.
+
+```
+┌────────────────────────┐         ┌────────────────────────┐
+│     Web Application    │         │   Android Mobile App   │
+│  Next.js 15 / React 19 │         │   React Native / Expo  │
+└───────────┬────────────┘         └───────────┬────────────┘
+            │                                  │
+            │ HTTPS / REST                     │ HTTPS / REST
+            └─────────────────┬────────────────┘
+                              ▼
+                 ┌───────────────────────────┐
+                 │       Flowtide API        │
+                 │     NestJS 10 Engine      │
+                 │  Auth / Projects / Tasks  │
+                 │  Dashboard / Validation   │
+                 └─────────────┬─────────────┘
+                               │
+                       ┌───────┴───────┐
+                       ▼               ▼
+            ┌────────────────────┐   ┌────────────────────┐
+            │     PostgreSQL     │   │       Redis        │
+            │ Normalized Relational│ │   BullMQ / Rate    │
+            │      Database      │   │   Limiting / Cache │
+            └────────────────────┘   └────────────────────┘
+```
+
+Both clients speak to the `/api` and `/api/v1` routes with identical authorization headers and data contracts.
+
+---
+
+## Technology Stack
+
+### Frontend (Web)
+- **Framework:** Next.js 15 (App Router), React 19
+- **Language:** TypeScript 5
+- **Styling:** Tailwind CSS 4
+- **State Management:** Zustand
+- **HTTP Client:** Native Fetch / Axios
+
+### Backend (API)
+- **Framework:** NestJS 10
+- **Runtime:** Node.js 20+
+- **Architecture:** Modular Monolith (Domain-Driven Modules)
+- **ORM / Data Access:** TypeORM 0.3
+- **Validation:** class-validator, class-transformer
+- **Documentation:** Swagger / OpenAPI 3.0
+
+### Database & Storage
+- **Primary Database:** PostgreSQL 16+
+- **Cache & Queue Broker:** Redis 7+
+- **Background Jobs:** BullMQ
+
+### Mobile (Android)
+- **Framework:** React Native 0.86, Expo SDK 52
+- **Language:** TypeScript 5
+- **Navigation:** React Navigation (Native Stack + Bottom Tabs)
+- **Secure Storage:** Expo SecureStore
+- **Network State:** @react-native-community/netinfo
+- **Icons:** @expo/vector-icons
+
+### Testing & Quality
+- **Unit & Service Testing:** Jest, ts-jest
+- **Type Checking:** TypeScript strict mode
+- **Linting:** ESLint, Prettier
 
 ---
 
 ## Project Structure
 
 ```
-TaskForge/
-├── frontend/                    # Next.js 15 App Router
-│   └── src/
-│       ├── app/                 # Pages (auth, dashboard)
-│       ├── components/          # UI components + layout
-│       ├── features/            # Feature modules (tasks, projects, orgs)
-│       ├── hooks/               # Shared hooks
-│       ├── lib/                 # API client, utils, socket
-│       ├── store/               # Zustand stores
-│       └── types/               # TypeScript interfaces
-│
-├── backend/                     # NestJS 11 API
-│   └── src/
-│       ├── modules/
-│       │   ├── auth/            # JWT, refresh tokens, login/register
-│       │   ├── users/           # User management
-│       │   ├── organizations/   # Multi-tenant orgs, memberships, invites
-│       │   ├── projects/        # Project CRUD
-│       │   ├── tasks/           # Task CRUD with assignment
-│       │   ├── activity/        # Audit logging
-│       │   ├── realtime/        # WebSocket gateway
-│       │   ├── notifications/   # In-app notification system
-│       │   ├── mail/            # Nodemailer email service
-│       │   ├── billing/         # Stripe subscriptions
-│       │   └── health/          # Health checks
-│       ├── infrastructure/      # Database, Redis, Queue
-│       ├── common/              # Guards, filters, decorators
-│       └── shared/              # Enums, interfaces, errors│
+flowtide/
+├── backend/                  # NestJS REST API & background worker
+│   ├── src/
+│   │   ├── config/           # Environment & database configurations
+│   │   ├── infrastructure/   # Database connection & migrations
+│   │   ├── modules/          # Auth, Projects, Tasks, Dashboard, Users, Mail
+│   │   └── shared/           # Common enums, filters, and interceptors
+│   ├── test/                 # Jest service and controller test suites
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend/                 # Next.js 15 web application
+│   ├── src/
+│   │   ├── app/              # Next.js App Router (dashboard, auth, projects, tasks)
+│   │   ├── components/       # Shared UI, layouts, and brand components
+│   │   ├── features/         # Domain-specific UI features (modals, filters, cards)
+│   │   ├── lib/api/          # API client and endpoints
+│   │   └── store/            # Client state stores (auth, UI)
+│   ├── package.json
+│   └── tsconfig.json
+├── mobile/                   # React Native & Expo mobile application
+│   ├── src/
+│   │   ├── components/       # Native UI components (Button, Input, OfflineBanner)
+│   │   ├── context/          # AuthContext and NetworkContext
+│   │   ├── navigation/       # Bottom tabs & stack navigators
+│   │   ├── screens/          # Login, Register, Dashboard, Projects, Tasks
+│   │   └── services/         # Axios client and SecureStore wrapper
+│   ├── app.json              # Expo application configuration
+│   └── package.json
+├── docs/                     # Engineering specifications
+│   ├── architecture.md       # High-level architecture and execution pipeline
+│   ├── api.md                # Complete API endpoint reference
+│   ├── database.md           # Schema design, entities, and migrations
+│   ├── deployment.md         # Production deployment operations
+│   ├── mobile.md             # Mobile client architecture & APK guide
+│   ├── security.md           # Security audit, threat model, and token rules
+│   └── ER-DIAGRAM.md         # Entity-relationship diagrams
+├── scripts/                  # Automated verification and deployment scripts
+├── .github/workflows/        # CI/CD pipelines (Lint, Test, Build, Docker)
+├── docker-compose.yml        # Development multi-container orchestration
+├── docker-compose.prod.yml   # Production container orchestration
+├── .env.example              # Canonical environment variables template
+└── README.md
 ```
 
 ---
@@ -169,217 +186,202 @@ TaskForge/
 ## Getting Started
 
 ### Prerequisites
-- Node.js 20+
-- PostgreSQL 16+
-- Redis 7+
+- **Node.js:** v20.x or higher
+- **npm:** v10.x or higher
+- **PostgreSQL:** v16+ running locally or in Docker
+- **Redis:** v7+ running locally or in Docker
 
-### Backend Setup
+### Clone Repository
+```bash
+git clone https://github.com/SanyamRajSingh/project-management-platform.git
+cd project-management-platform
+```
 
+### Environment Variables
+Copy the template file to configure your local environment:
+```bash
+cp .env.example backend/.env
+```
+Ensure `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, and `JWT_SECRET` are set appropriately.
+
+### Database Setup & Migrations
+Ensure PostgreSQL is active, then run the database migrations:
 ```bash
 cd backend
-cp .env.example .env          # Edit with your credentials
 npm install
-npm run migration:run         # Create database tables
-npm run start:dev             # Start API on port 3000
-npm run start:worker:dev      # Start background worker (separate terminal)
+npm run build
+node dist/run-migrations.js
 ```
+
+### Backend Setup
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+The backend API starts on `http://localhost:3000`.
 
 ### Frontend Setup
-
+In a new terminal window:
 ```bash
 cd frontend
-cp .env.local.example .env.local
 npm install
-npm run dev                   # Start on port 3001
+npm run dev
 ```
+The web dashboard opens at `http://localhost:3001` (or `http://localhost:3000`).
 
-### Access the App
-
-1. Open `http://localhost:3001`
-2. Register a new account
-3. Create an organization
-4. Start creating projects and tasks
-
----
-
-## Environment Variables
-
-### Backend (.env)
-
+### Mobile Setup
+In a new terminal window:
 ```bash
-# Server
-PORT=3000
-NODE_ENV=development
-
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
-DB_NAME=taskforge
-
-# Redis
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# Auth
-JWT_SECRET=your-secret-key-at-least-32-characters-long
-ACCESS_TOKEN_TTL=15m
-REFRESH_TOKEN_TTL=7d
-
-# Email (SMTP) - Optional, logs emails when not configured
-SMTP_HOST=localhost
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=
-SMTP_PASS=
-SMTP_FROM=TaskForge <noreply@taskforge.io>
-
-# Stripe (optional in development)
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-FRONTEND_URL=http://localhost:3001
+cd mobile
+npm install
+npx expo start
 ```
+Press `a` to run on an attached Android emulator or device, or scan the QR code with Expo Go.
 
-### Frontend (.env.local)
+---
 
+## API Documentation
+
+Flowtide provides auto-generated OpenAPI documentation accessible via Swagger UI:
+- **Swagger URL:** `http://localhost:3000/api/docs`
+- **JSON Specification:** `http://localhost:3000/api/docs-json`
+
+### Core Endpoint Summary
+
+| Category | Method | Endpoint | Description |
+| :--- | :--- | :--- | :--- |
+| **Auth** | `POST` | `/api/auth/register` | Register new account and workspace |
+| **Auth** | `POST` | `/api/auth/login` | Log in and receive JWT token pair |
+| **Auth** | `POST` | `/api/auth/refresh` | Rotate and issue fresh access token |
+| **Auth** | `POST` | `/api/auth/logout` | Revoke session and clear refresh token |
+| **Auth** | `GET` | `/api/auth/me` | Fetch authenticated user profile |
+| **Projects** | `GET` | `/api/projects` | List projects (with search & status filter) |
+| **Projects** | `POST` | `/api/projects` | Create a new project |
+| **Projects** | `GET` | `/api/projects/:id` | Fetch specific project details |
+| **Projects** | `PUT` | `/api/projects/:id` | Update project name, status, dates |
+| **Projects** | `DELETE`| `/api/projects/:id` | Delete project and associated tasks |
+| **Tasks** | `GET` | `/api/tasks` | List tasks (with search, status, priority) |
+| **Tasks** | `POST` | `/api/tasks` | Create a task associated with a project |
+| **Tasks** | `GET` | `/api/tasks/:id` | Fetch specific task details |
+| **Tasks** | `PUT` | `/api/tasks/:id` | Update task fields (status, priority) |
+| **Tasks** | `DELETE`| `/api/tasks/:id` | Delete specific task |
+| **Dashboard**| `GET` | `/api/dashboard` | Fetch aggregated dashboard metrics |
+
+*Note: All endpoints are also accessible under the `/api/v1/*` prefix.*
+
+---
+
+## Security
+
+Flowtide implements multi-layered security controls designed for enterprise reliability:
+- **Argon2id Hashing:** Password security using the industry's most robust hashing algorithm.
+- **Stateless JWTs & Rotating Refresh Tokens:** 15-minute access tokens minimize exposure windows, while refresh token reuse detection invalidates compromised sessions.
+- **Multi-Tenant Ownership Isolation:** Every project and task query scopes through the active `organization_id`.
+- **Strict Parameterized Queries:** TypeORM prevents SQL injection vulnerabilities by separating user inputs from SQL logic.
+- **Input Validation:** NestJS `ValidationPipe` with strict payload whitelisting.
+- **Rate Limiting:** Guard protection limits sensitive auth routes to 10 requests/minute.
+- **Zero-Secret Commits:** Strictly enforced `.gitignore` preventing accidental commits of `.env` files.
+
+---
+
+## Testing
+
+Flowtide contains automated unit and service test suites verifying core business logic, permissions, and database operations.
+
+Run the test suite:
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:3000
-NEXT_PUBLIC_SOCKET_URL=http://localhost:3000
+cd backend
+npm test
 ```
+
+### Coverage Areas
+- **Authentication Service (`auth.service.spec.ts`):** Validates password hashing, token issuance, refresh rotation, and invalid credential rejections.
+- **Projects Service (`projects.service.spec.ts`):** Verifies project creation, status mapping, date validation, and ownership barriers.
+- **Tasks Service (`tasks.service.spec.ts`):** Confirms task creation, priority assignments, status transitions, and project relationships.
+- **Dashboard Service (`dashboard.service.spec.ts`):** Ensures accuracy of SQL aggregations for total counts, pending/completed metrics, and progress percentages.
+- **Enum Mappings (`enum-mappings.spec.ts`):** Confirms bidirectional mapping between frontend query parameters and internal entity states.
 
 ---
 
-## Email Notification Setup
+## Deployment
 
-### Using Nodemailer with SMTP
-
-TaskForge uses Nodemailer for transactional emails. Configure SMTP credentials in your backend `.env`:
-
+### Docker Orchestration
+Flowtide includes production Docker configurations with Nginx reverse proxying:
 ```bash
-SMTP_HOST=smtp.gmail.com      # Or any SMTP provider
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-SMTP_FROM=TaskForge <noreply@yourdomain.com>
+# Production deployment
+cp .env.production.example .env.production
+./scripts/deploy.sh latest
 ```
 
-### Testing with Mailtrap/Ethereal
+### Cloud Providers
+- **Backend:** Deployable to Render, Railway, Fly.io, or AWS ECS as a containerized Node.js service.
+- **Database:** Fully compatible with managed PostgreSQL providers (Neon, Supabase, AWS RDS).
+- **Cache:** Compatible with Upstash Redis or AWS ElastiCache.
+- **Frontend:** Zero-configuration deployment to Vercel or Cloudflare Pages.
 
-For development, use [Mailtrap](https://mailtrap.io) or [Ethereal](https://ethereal.email):
+---
 
+## Mobile APK Distribution
+
+To build an Android APK using Expo Application Services (EAS):
 ```bash
-SMTP_HOST=sandbox.smtp.mailtrap.io
-SMTP_PORT=2525
-SMTP_USER=your-mailtrap-user
-SMTP_PASS=your-mailtrap-pass
+cd mobile
+npm install -g eas-cli
+eas login
+eas build -p android --profile preview
 ```
-
-### Email Events
-
-| Event | Email Sent To | Content |
-|-------|--------------|---------|
-| Admin invites a user | Invited email address | Invitation with accept link |
-| Task assigned to user | Assigned user's email | Task title, description, priority, due date |
-| Task reassigned | Newly assigned user | Same as above |
-
-When SMTP is not configured, emails are logged to console for development visibility.
+The resulting standalone `.apk` can be installed directly on physical Android testing devices.
 
 ---
 
-## WebSocket Notifications
+## Troubleshooting
 
-TaskForge uses Socket.IO for real-time notifications:
+### Port Conflicts (3000 / 3001)
+If the backend or frontend fails to bind to ports 3000 or 3001:
+- Check running processes: `netstat -ano | findstr :3000`
+- Adjust ports in `.env` (`PORT=3000` for backend, `PORT=3001` for frontend).
 
-1. **Connection**: Client connects with JWT token in handshake auth
-2. **Rooms**: Users join `user:{id}` (personal) and `org:{orgId}` (team) rooms
-3. **Events**: Domain events (task.created, task.updated, member.joined) broadcast to org rooms
-4. **Notifications**: Task assignments and member joins create persistent notifications
-5. **Frontend**: Bell icon with unread count, dropdown with notification list
+### Database Connection Refused
+- Verify PostgreSQL is running: `pg_isready -h localhost -p 5432`
+- Check that credentials in `.env` match your local PostgreSQL configuration.
 
----
-
-## API Endpoints
-
-### Authentication
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/v1/auth/register` | Register new user |
-| POST | `/api/v1/auth/login` | Login |
-| POST | `/api/v1/auth/refresh` | Refresh tokens |
-| GET | `/api/v1/auth/me` | Get current user |
-| POST | `/api/v1/auth/logout` | Logout |
-
-### Organizations
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/v1/organizations` | Create organization |
-| GET | `/api/v1/organizations` | List user's orgs |
-| POST | `/api/v1/organizations/switch` | Switch active org |
-| GET | `/api/v1/organizations/current` | Get current org |
-| GET | `/api/v1/organizations/members` | List org members |
-| POST | `/api/v1/organizations/invites` | Create invite (admin) |
-
-### Projects & Tasks
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/v1/projects` | Create project |
-| GET | `/api/v1/projects` | List projects |
-| POST | `/api/v1/projects/{id}/tasks` | Create task |
-| GET | `/api/v1/tasks` | List all tasks |
-| PATCH | `/api/v1/tasks/{id}` | Update task |
-
-### Notifications
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/v1/notifications` | List notifications |
-| GET | `/api/v1/notifications/unread-count` | Get unread count |
-| POST | `/api/v1/notifications/{id}/read` | Mark as read |
-| POST | `/api/v1/notifications/read-all` | Mark all as read |
+### Mobile Network Timeout
+- When running on physical Android devices, set `EXPO_PUBLIC_API_BASE_URL` to your machine's local IP address (e.g. `http://192.168.1.10:3000/api`) rather than `localhost`.
 
 ---
 
-## Architecture Highlights
+## Evaluator Walkthrough (Demo Flow)
 
-### Request Flow
-```
-Client -> Next.js -> NestJS API
-                        |
-                   Guard Chain:
-                   Throttler -> JWT -> OrgMembership -> Roles
-                        |
-                   Service Layer -> PostgreSQL
-                        |
-                   Domain Event Bus
-                    /          \
-              BullMQ         Socket.IO
-              Queue          Broadcast
-                |
-              Worker
-           (audit log)
-```
-
-### Multi-Tenant Isolation
-- Organization ID validated at guard layer, not query layer
-- Services read org context from validated request, never from user input
-- Membership checked with 3-tier cache for performance
-
-### Event-Driven Architecture
-- All mutations emit domain events
-- Events consumed by: Activity Logger, WebSocket Broadcaster, Notification Creator, Email Sender
-- Background worker processes audit log asynchronously
+1. **Register Account:** Navigate to `http://localhost:3001/register` and register with a fresh email and workspace name.
+2. **Access Dashboard:** View the initial zero-state metrics displaying 0 total projects and 0 tasks.
+3. **Create Project:** Click **Create Project**, assign a title (e.g., "Mobile Release"), select status `In Progress`, and provide target start and end dates.
+4. **Create Tasks:** Open the project, add tasks across different priorities (`High`, `Medium`), and view them in the Kanban board.
+5. **Update Task Status:** Drag a task or toggle its status to `Done`.
+6. **Verify Metrics:** Return to the Dashboard; verify that `Completed Tasks` incremented and `Progress` updated dynamically.
+7. **Launch Mobile App:** Launch the mobile app on Android, log in using the exact same credentials.
+8. **Verify Synchronization:** Confirm that the project and tasks created on web appear instantly on mobile.
+9. **Update on Mobile:** Mark a task as complete on mobile; refresh the web application to see the change reflected immediately.
+10. **Test Filters:** Use the project and task search bars and status filter pills to verify filtering accuracy.
 
 ---
 
-## Contributing
+## Future Improvements
 
-Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a pull request.
-
-See the [open issues](https://github.com/engmaryamameen/TaskForge/issues) for a list of known issues and planned features.
+- Granular role-based permissions (Custom RBAC rules).
+- Automated webhook triggers for third-party integrations (Slack / GitHub).
+- Native push notifications via Firebase Cloud Messaging (FCM).
+- Real-time collaborative task editing with presence indicators.
 
 ---
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
+
+---
+
+## Author
+
+**Sanyam Raj Singh**  
+GitHub: [https://github.com/SanyamRajSingh](https://github.com/SanyamRajSingh)

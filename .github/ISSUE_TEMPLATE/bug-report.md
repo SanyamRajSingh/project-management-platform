@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug to help us improve TaskForge
+about: Report a bug to help us improve Flowtide
 title: "[Bug] "
 labels: bug
 assignees: ''
