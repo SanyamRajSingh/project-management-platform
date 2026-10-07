@@ -42,7 +42,7 @@ export class MailService {
     const secure = this.configService.get<boolean>('mail.secure', false);
     const user = this.configService.get<string>('mail.user', '');
     const pass = this.configService.get<string>('mail.pass', '');
-    this.from = this.configService.get<string>('mail.from', 'TaskForge <noreply@taskforge.io>');
+    this.from = this.configService.get<string>('mail.from', 'Flowtide <noreply@flowtide.app>');
     this.frontendUrl = this.configService.get<string>('mail.frontendUrl', 'http://localhost:3001');
 
     this.enabled = !!user && !!pass;
@@ -68,7 +68,7 @@ export class MailService {
 
     await this.send({
       to: data.recipientEmail,
-      subject: `You've been invited to ${data.organizationName} on TaskForge`,
+      subject: `You've been invited to ${data.organizationName} on Flowtide`,
       html,
       text,
     });
@@ -86,7 +86,7 @@ export class MailService {
     });
     await this.send({
       to: data.to,
-      subject: 'Verify your TaskForge account',
+      subject: 'Verify your Flowtide account',
       html,
       text,
     });
@@ -97,7 +97,7 @@ export class MailService {
     const { html, text } = passwordResetTemplate({ resetUrl });
     await this.send({
       to: data.to,
-      subject: 'Reset your TaskForge password',
+      subject: 'Reset your Flowtide password',
       html,
       text,
     });

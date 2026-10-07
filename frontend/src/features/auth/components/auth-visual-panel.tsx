@@ -1,4 +1,5 @@
-import { IconBolt, IconCheckSquare, IconFolder, IconUsers } from '@/components/icons';
+import { FlowtideMark } from '@/components/common/flowtide-mark';
+import { IconCheckSquare, IconFolder, IconUsers } from '@/components/icons';
 
 type AuthVisualPanelProps = {
   title: React.ReactNode;
@@ -41,9 +42,9 @@ export function AuthVisualPanel({ title, description }: AuthVisualPanelProps) {
       <div className="relative z-10 flex h-full min-h-[520px] flex-col px-8 pb-9 pt-9 sm:px-9 sm:pb-10 sm:pt-10 lg:min-h-[600px] lg:px-10 lg:pb-10 lg:pt-10 xl:px-11 xl:pt-11">
         <header className="flex shrink-0 items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/20 backdrop-blur-md">
-            <IconBolt className="h-5 w-5 text-white" />
+            <FlowtideMark className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-bold tracking-tight text-white sm:text-xl">TaskForge</span>
+          <span className="text-lg font-bold tracking-tight text-white sm:text-xl">Flowtide</span>
         </header>
 
         <div className="mt-9 flex max-w-88 flex-col sm:mt-10 lg:mt-11 lg:max-w-96">
@@ -69,7 +70,7 @@ export function AuthVisualPanel({ title, description }: AuthVisualPanelProps) {
         </div>
 
         <p className="mt-auto pt-10 text-[12px] leading-relaxed text-white/35 lg:pt-12">
-          &copy; {new Date().getFullYear()} TaskForge — Built for engineering teams
+          &copy; {new Date().getFullYear()} Flowtide — Plan. Track. Deliver.
         </p>
       </div>
     </div>

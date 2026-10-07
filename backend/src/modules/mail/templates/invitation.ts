@@ -25,7 +25,7 @@ export function invitationTemplate(data: InvitationTemplateData): { html: string
           <!-- Header -->
           <tr>
             <td style="background-color:#0C66E4;padding:32px 40px;text-align:center;">
-              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">TaskForge</h1>
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">Flowtide</h1>
             </td>
           </tr>
           <!-- Body -->
@@ -59,7 +59,7 @@ export function invitationTemplate(data: InvitationTemplateData): { html: string
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #DCDFE4;text-align:center;">
               <p style="margin:0;color:#8993A5;font-size:12px;">
-                Sent by TaskForge &mdash; Multi-tenant project management
+                Sent by Flowtide &mdash; Plan. Track. Deliver.
               </p>
             </td>
           </tr>
@@ -78,7 +78,7 @@ Accept the invitation: ${data.inviteUrl}
 
 This invitation expires in 24 hours.
 
-— TaskForge`;
+— Flowtide`;
 
   return { html, text };
 }

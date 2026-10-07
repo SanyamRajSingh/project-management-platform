@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* ─── TaskForge Premium Design System ─── */
+/* ─── Flowtide Design System ─── */
 @theme {
   /* Inter (via next/font on <html> --font-inter) drives all `font-sans` usage */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;

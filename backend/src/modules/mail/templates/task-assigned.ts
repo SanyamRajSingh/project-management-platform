@@ -42,7 +42,7 @@ export function taskAssignedTemplate(data: TaskAssignedTemplateData): { html: st
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
           <tr>
             <td style="background-color:#0C66E4;padding:32px 40px;text-align:center;">
-              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">TaskForge</h1>
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">Flowtide</h1>
             </td>
           </tr>
           <tr>
@@ -84,7 +84,7 @@ export function taskAssignedTemplate(data: TaskAssignedTemplateData): { html: st
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #DCDFE4;text-align:center;">
               <p style="margin:0;color:#8993A5;font-size:12px;">
-                Sent by TaskForge &mdash; Multi-tenant project management
+                Sent by Flowtide &mdash; Plan. Track. Deliver.
               </p>
             </td>
           </tr>
@@ -104,7 +104,7 @@ ${data.taskDescription ? `Description: ${data.taskDescription}\n` : ''}${data.pr
 ${data.dueDate ? `Due: ${data.dueDate}\n` : ''}
 View the task: ${data.taskUrl}
 
-— TaskForge`;
+— Flowtide`;
 
   return { html, text };
 }

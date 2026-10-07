@@ -101,7 +101,7 @@ function RegisterPageContent() {
           every sprint.
         </>
       }
-      panelDescription="Join teams that use TaskForge to plan, track, and deliver projects with confidence."
+      panelDescription="Join teams that use Flowtide to plan, track, and deliver projects with confidence."
     >
       <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col lg:block lg:flex-none">
         <div className={AUTH_MOBILE_SCROLL_COLUMN}>

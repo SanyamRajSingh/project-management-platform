@@ -1,5 +1,5 @@
 x-backend-image: &backend-image
-  image: ghcr.io/engmaryamameen/taskforge-backend:${TAG:-latest}
+  image: ghcr.io/sanyamrajsingh/flowtide-backend:${TAG:-latest}
 
 x-backend-env: &backend-env
   NODE_ENV: production

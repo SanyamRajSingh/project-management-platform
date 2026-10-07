@@ -42,5 +42,5 @@ export const envValidationSchema = Joi.object({
   SMTP_SECURE: Joi.string().valid('true', 'false', '1', '0', '').optional().allow(''),
   SMTP_USER: Joi.string().optional().allow(''),
   SMTP_PASS: Joi.string().optional().allow(''),
-  SMTP_FROM: Joi.string().optional().default('TaskForge <noreply@taskforge.io>'),
+  SMTP_FROM: Joi.string().optional().default('Flowtide <noreply@flowtide.app>'),
 });

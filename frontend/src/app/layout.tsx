@@ -10,8 +10,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'TaskForge',
-  description: 'Multi-tenant project management platform',
+  title: 'Flowtide | Plan. Track. Deliver.',
+  description: 'Flowtide — Modern unified project and task management platform.',
+  icons: {
+    icon: '/icon.svg',
+  },
+  openGraph: {
+    title: 'Flowtide | Plan. Track. Deliver.',
+    description: 'Flowtide — Modern unified project and task management platform.',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

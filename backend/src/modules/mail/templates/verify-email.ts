@@ -11,7 +11,7 @@ export function verifyEmailTemplate(data: {
     <tr><td align="center">
       <table width="100%" style="max-width:560px;background:#fff;border-radius:12px;padding:40px;">
         <tr><td style="background:#0C66E4;padding:24px;text-align:center;border-radius:12px 12px 0 0;">
-          <strong style="color:#fff;font-size:20px;">TaskForge</strong>
+          <strong style="color:#fff;font-size:20px;">Flowtide</strong>
         </td></tr>
         <tr><td style="padding:32px;">
           <p style="color:#172B4D;font-size:15px;line-height:1.6;margin:0 0 16px;">Hi ${data.firstName},</p>

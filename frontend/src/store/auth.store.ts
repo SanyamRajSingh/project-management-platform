@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: 'taskforge-auth',
+      name: 'flowtide-auth',
       // Avoid hydrating during SSR / missing window; Providers calls persist.rehydrate() on the client.
       skipHydration: true,
       partialize: (state) => ({

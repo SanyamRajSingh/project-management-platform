@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useUIStore } from '@/store/ui.store';
 import { NavItem } from './nav-item';
 import { OrgSwitcher } from './org-switcher';
+import { FlowtideMark } from '@/components/common/flowtide-mark';
 import {
   IconHome,
   IconFolder,
@@ -12,7 +13,6 @@ import {
   IconUsers,
   IconActivity,
   IconSettings,
-  IconBolt,
   IconSearch,
 } from '@/components/icons';
 import { useCommandPalette } from '@/features/command/use-command-palette';
@@ -102,10 +102,10 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex h-16 shrink-0 items-center gap-2.5 px-5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 shadow-soft">
-            <IconBolt className="h-5 w-5 text-white" />
+            <FlowtideMark className="h-5 w-5 text-white" />
           </div>
           <Link href="/" className="text-[17px] font-bold tracking-tight text-neutral-900">
-            TaskForge
+            Flowtide
           </Link>
         </div>
 
@@ -165,7 +165,7 @@ export function Sidebar() {
         {/* Footer */}
         <div className="shrink-0 border-t border-neutral-100 p-4">
           <div className="rounded-xl bg-gradient-to-br from-primary-50 to-primary-100/50 p-3.5 border border-primary-200/50">
-            <p className="text-xs font-semibold text-primary-800">TaskForge Pro</p>
+            <p className="text-xs font-semibold text-primary-800">Flowtide Pro</p>
             <p className="mt-0.5 text-[11px] leading-relaxed text-primary-600/80">
               Unlock advanced analytics, automations, and more.
             </p>

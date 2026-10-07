@@ -1,4 +1,4 @@
-import { IconBolt } from '@/components/icons';
+import { FlowtideMark } from '@/components/common/flowtide-mark';
 import { AuthVisualPanel } from './auth-visual-panel';
 
 type AuthShellProps = {
@@ -14,13 +14,13 @@ type AuthShellProps = {
 
 const defaultTitle = (
   <>
-    Ship work
+    Plan. Track.
     <br />
-    with clarity.
+    Deliver.
   </>
 );
 const defaultDescription =
-  'Multi-tenant project management for teams that plan, track, and deliver without the noise.';
+  'High-performance project and task management for teams that plan, track, and deliver without the noise.';
 
 export function AuthShell({
   children,
@@ -46,9 +46,9 @@ export function AuthShell({
           {/* Mobile brand strip */}
           <div className="flex shrink-0 items-center justify-center gap-2.5 border-b border-neutral-100 bg-white px-6 py-3 sm:py-3.5 lg:hidden">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-600 shadow-sm ring-1 ring-black/5">
-              <IconBolt className="h-5 w-5 text-white" />
+              <FlowtideMark className="h-5 w-5 text-white" />
             </div>
-            <span className="text-[15px] font-bold tracking-tight text-neutral-900">TaskForge</span>
+            <span className="text-[15px] font-bold tracking-tight text-neutral-900">Flowtide</span>
           </div>
 
           {/* Form column */}
